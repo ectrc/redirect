@@ -2,6 +2,7 @@
 #define HOOKS_H
 
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
+#define redirect_hostname "localhost"
 
 #include <winsock2.h>
 #include <windows.h>
@@ -37,14 +38,14 @@ namespace hooks {
 
     inline getaddrinfo_t getaddrinfo_og = nullptr;
     INT WSAAPI getaddrinfo_detour(PCSTR pNodeName, PCSTR pServiceName, const ADDRINFOA* pHints, PADDRINFOA* ppResult) {
-        pNodeName = "localhost";
-        return getaddrinfo_og(pNodeName, pServiceName, pHints, ppResult);
+        return getaddrinfo_og(redirect_hostname, pServiceName, pHints, ppResult);
     }
 
     inline GetAddrInfoW_t GetAddrInfoW_og = nullptr;
     INT WSAAPI GetAddrInfoW_detour(PCWSTR pNodeName, PCWSTR pServiceName, const ADDRINFOW* pHints, PADDRINFOW* ppResult) {
-        pNodeName = L"localhost";
-        return GetAddrInfoW_og(pNodeName, pServiceName, pHints, ppResult);
+        std::string hostname(redirect_hostname);
+        std::wstring wHostname(hostname.begin(), hostname.end());
+        return GetAddrInfoW_og(wHostname.c_str(), pServiceName, pHints, ppResult);
     }
 }
 
