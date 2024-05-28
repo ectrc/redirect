@@ -1,4 +1,4 @@
-#include "src/hooks.h"
+#include "hooks.h"
 
 #include <minhook.h>
 #include <windows.h>
