@@ -1,5 +1,7 @@
-#ifndef KEYAUTH_HOOKS_H
-#define KEYAUTH_HOOKS_H
+#ifndef HOOKS_H
+#define HOOKS_H
+
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
 
 #include <winsock2.h>
 #include <windows.h>
