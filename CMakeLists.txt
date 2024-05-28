@@ -11,5 +11,5 @@ add_library(keyauth SHARED
     main.cpp
 )
 
-target_link_libraries(keyauth PUBLIC libhat minhook ws2_32)
+target_link_libraries(keyauth PUBLIC minhook ws2_32)
 target_include_directories(keyauth PUBLIC )
