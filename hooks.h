@@ -10,6 +10,7 @@
 typedef INT (WSAAPI* connect_t)(SOCKET s, const sockaddr *name, int namelen);
 typedef INT (WSAAPI* recv_t)(SOCKET s, char *buf, int len, int flags);
 typedef INT (WSAAPI* send_t)(SOCKET s, const char *buf, int len, int flags);
+typedef INT (WSAAPI* getaddrinfo_t)(PCSTR pNodeName, PCSTR pServiceName, const ADDRINFOA* pHints, PADDRINFOA* ppResult);
 typedef INT (WSAAPI* GetAddrInfoW_t)(PCWSTR pNodeName, PCWSTR pServiceName, const ADDRINFOW* pHints, PADDRINFOW* ppResult);
 
 namespace hooks {
@@ -30,6 +31,12 @@ namespace hooks {
     inline send_t send_og = nullptr;
     INT WSAAPI send_hook(SOCKET s, const char *buf, int len, int flags) {
         return send_og(s, buf, len, flags);
+    }
+
+    inline getaddrinfo_t getaddrinfo_og = nullptr;
+    INT WSAAPI getaddrinfo_detour(PCSTR pNodeName, PCSTR pServiceName, const ADDRINFOA* pHints, PADDRINFOA* ppResult) {
+        pNodeName = "localhost";
+        return getaddrinfo_og(pNodeName, pServiceName, pHints, ppResult);
     }
 
     inline GetAddrInfoW_t GetAddrInfoW_og = nullptr;

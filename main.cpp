@@ -11,6 +11,7 @@ void __stdcall dll_entry(HMODULE module) {
     MH_CreateHookApi(L"ws2_32.dll", "connect", (void*)hooks::connect_detour, (void**)(&hooks::connect_og));
     MH_CreateHookApi(L"ws2_32.dll", "recv", (void*)hooks::recv_hook, (void**)(&hooks::recv_og));
     MH_CreateHookApi(L"ws2_32.dll", "send", (void*)hooks::send_hook, (void**)(&hooks::send_og));
+    MH_CreateHookApi(L"ws2_32.dll", "getaddrinfo", (void*)hooks::getaddrinfo_detour, (void**)(&hooks::getaddrinfo_og));
     MH_CreateHookApi(L"ws2_32.dll", "GetAddrInfoW", (void*)hooks::GetAddrInfoW_detour, (void**)(&hooks::GetAddrInfoW_og));
     MH_EnableHook(MH_ALL_HOOKS);
 }
