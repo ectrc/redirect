@@ -1,14 +1,17 @@
 #ifndef HOOKS_H
 #define HOOKS_H
 
+#include "hostname.h"
+
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
-#define redirect_hostname "localhost"
 
 #include <winsock2.h>
 #include <windows.h>
 #include <cstdint>
 #include <string>
 #include <iostream>
+#include <array>
+#include <cstddef>
 
 typedef INT (WSAAPI* connect_t)(SOCKET s, const sockaddr *name, int namelen);
 typedef INT (WSAAPI* recv_t)(SOCKET s, char *buf, int len, int flags);
@@ -43,9 +46,7 @@ namespace hooks {
 
     inline GetAddrInfoW_t GetAddrInfoW_og = nullptr;
     INT WSAAPI GetAddrInfoW_detour(PCWSTR pNodeName, PCWSTR pServiceName, const ADDRINFOW* pHints, PADDRINFOW* ppResult) {
-        std::string hostname(redirect_hostname);
-        std::wstring wHostname(hostname.begin(), hostname.end());
-        return GetAddrInfoW_og(wHostname.c_str(), pServiceName, pHints, ppResult);
+        return GetAddrInfoW_og(wide_redirect_hostname, pServiceName, pHints, ppResult);
     }
 }
 
